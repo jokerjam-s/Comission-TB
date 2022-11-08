@@ -1,0 +1,26 @@
+﻿@model IEnumerable<AppUsers>
+@{
+    ViewBag.Title = "Изменение ролей";
+}
+
+<h2>Список пользователей</h2>
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>Email пользователя</th>
+            <th>ФИО</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>@user.GetFio()</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-email="@user.Email">Права доступа</a>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,18 @@
+﻿@model ComissionTB.Data.Dolgn
+
+@{
+    ViewData["Title"] = "Удалить должность";
+}
+
+<h1>Удалить</h1>
+
+<h3>Уверены в необходимости удаления даннной информации?</h3>
+<div>
+    <h5>Должность: @Html.DisplayFor(model => model.dlName)</h5>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id_dl" />
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">К списку</a>
+    </form>
+</div>

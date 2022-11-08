@@ -1,0 +1,48 @@
+﻿@model ComissionTB.ViewModels.RegisterUserViewModel
+
+
+<h2>Регистрация пользователя</h2>
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <form method="post" asp-controller="Account" asp-action="RegisterUser">
+
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label class="col-form-label" asp-for="userFio"></label><br />
+                <input class="form-control" asp-for="userFio" />
+                <span asp-validation-for="userFio"></span>
+            </div>
+
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label class="col-form-label" asp-for="userPriem"></label><br />
+                <input class="form-control" asp-for="userPriem" />
+                <span asp-validation-for="userPriem"></span>
+            </div>
+
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label class="col-form-label" asp-for="Email"></label><br />
+                <input class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" asp-for="Password"></label><br />
+                <input class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="col-form-label" asp-for="PasswordConfirm"></label><br />
+                <input class="form-control" asp-for="PasswordConfirm" />
+                <span asp-validation-for="PasswordConfirm"></span>
+            </div>
+
+            <div>
+                <input type="submit" class="btn btn-success" value="Регистрация" />
+            </div>
+        </form>
+    </div>
+</div>

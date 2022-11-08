@@ -1,0 +1,36 @@
+﻿@model ComissionTB.ViewModels.ExecPredpViewModel
+
+@{
+    ViewData["Title"] = "Выполнение предписания";
+}
+
+<h1>Выполнение предписания</h1>
+
+
+<form asp-action="ExecPredp">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="aktNo" />
+    <input type="hidden" asp-for="prNo" />
+
+    <div class="form-group">
+        <label class="control-label">Дата выполнения</label>
+        <input asp-for="prIspDate" class="form-control" />
+        <span asp-validation-for="prIspDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Описание</label>
+        <textarea asp-for="prIspNote" class="form-control"></textarea>
+        <span asp-validation-for="prIspNote" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Выполнен" class="btn btn-success" />
+        <a asp-action="Detail" asp-route-id="@Model.aktNo" class="btn btn-primary">К списку</a>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

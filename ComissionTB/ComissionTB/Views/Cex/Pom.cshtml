@@ -1,0 +1,36 @@
+﻿@model ComissionTB.ViewModels.PomListViewModel
+
+@{
+    ViewData["Title"] = "Список помещений";
+}
+
+<h1>Список помещений <span class="text-muted">@Model.cex.cexName</span></h1>
+
+<p>
+    <a asp-action="CreatePom" asp-route-id="@Model.cex.id_cex" class="btn btn-success btn-sm">Создать</a>
+</p>
+
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Помещение
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.pomList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pomName)
+                </td>
+                <td>
+                    <a asp-action="EditPom" asp-route-id_pom="@item.id_pom" class="btn-warning btn-sm">Изменить</a> |
+                    <a asp-action="DeletePom" asp-route-id_pom="@item.id_pom" class="btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

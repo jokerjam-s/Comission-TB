@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Predp>
+
+
+@{
+    Layout = null;
+
+    ViewData["Title"] = "Открытые предписания";
+    int rNo = 1;
+}
+
+<!DOCTYPE html>
+<title>Открытые предписания на @DateTime.Now.Date.ToString("d")</title>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <style type="text/css">
+        TABLE {
+            border-collapse: collapse; /* Убираем двойные линии между ячейками */
+            font-weight: normal;
+            text-align: left;
+        }
+
+        TR {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        TH {
+            background: #fff; /* Цвет фона ячейки */
+            font-weight: normal;
+            text-align: left;
+        }
+
+        TD {
+            background: #fff; /* Цвет фона ячеек */
+            font-weight: normal;
+            text-align: left;
+        }
+
+        TH, TD {
+            border: 1px solid black; /* Параметры рамки */
+            padding: 4px; /* Поля вокруг текста */
+            font-weight: normal;
+            text-align: left;
+        }
+
+        p {
+            text-align: justify
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div class="row">
+        <div class="col">
+            <h2 style="text-align:center">Открытые предписания                                                                               на @DateTime.Now.Date.ToString("d")</h2>
+
+            <table style="border-collapse: collapse; border: 1px solid black;">
+                <thead>
+                    <tr>
+                        <th>Акт №</th>
+                        <th>Цех</th>
+                        <th>Помещение</th>
+                        <th>Предписание</th>
+                        <th>Основание</th>
+                        <th>Примечание</th>
+                        <th>Исполнитель          </th>
+                        <th>Срок</th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td>@item.akt.aktNum</td>
+                <td>@item.akt.cex.cexName</td>
+                <td>@item.pom.pomName</td>
+                <td>@item.prText</td>
+                <td>@item.osnova</td>
+                <td>@item.prim</td>
+                                <td>
+                    @if (item.appUser != null)
+                    {
+                        @item.appUser.GetFio()
+                    }
+                </td>
+                <td>@item.prDate.ToString("d")</td>
+
+            </tr>
+                }
+            </table>
+
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+﻿@model ComissionTB.Models.Cex
+
+@{
+    ViewData["Title"] = "Удаление подразделение";
+}
+
+<h1>Удалить</h1>
+
+<h3>Уверены в необходимости удаления даннной информации?</h3>
+<div>
+    <h5>Подразделение: @Html.DisplayFor(model => model.cexName)</h5>
+
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id_cex" />
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">К списку</a>
+    </form>
+</div>

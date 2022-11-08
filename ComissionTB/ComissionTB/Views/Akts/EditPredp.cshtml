@@ -1,0 +1,62 @@
+﻿@model ComissionTB.ViewModels.CreateAktPredpViewModel
+
+@{
+    ViewData["Title"] = "Изменить предписание";
+  
+}
+
+
+<h1>Новое предписание</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditPredp">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="aktNo" />
+            <input type="hidden" asp-for="prNo" />
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="form-group">
+                <label class="control-label">Помещение</label>
+                @Html.DropDownListFor(
+                    m => m.id_pom,
+                    new SelectList(Model.pom, "id_pom", "pomName"),
+                    new { @class = "form-control" }
+                )
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Текст предписания</label>
+                <textarea asp-for="prText" class="form-control"></textarea>
+                <span asp-validation-for="prText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Основание</label>
+                <textarea asp-for="osnova" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Примечание</label>
+                <textarea asp-for="prim" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Дата исполнения</label>
+                <input asp-for="prDate" class="form-control" value="@Model.prDate.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="prDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+                <a asp-action="Detail" asp-route-id="@Model.aktNo" class="btn btn-primary">К списку</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

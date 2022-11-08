@@ -1,0 +1,20 @@
+﻿@model string
+@{
+    ViewBag.Title = "Изменение ролей";
+}
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Name">Новая роль</label>
+        <input name="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="Descript">Новая роль</label>
+        <input name="Descript" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>

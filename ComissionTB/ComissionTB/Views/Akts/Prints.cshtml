@@ -1,0 +1,169 @@
+﻿@model ComissionTB.Models.Akt
+
+
+@{
+    Layout = null;
+
+    ViewData["Title"] = "Информация об акте";
+    int rNo = 1;
+}
+
+<!DOCTYPE html>
+<title>Акт-предписание №@Model.aktNum</title>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />*@
+
+    <style type="text/css">
+
+        TABLE {
+            border-collapse: collapse; /* Убираем двойные линии между ячейками */
+            text-align: left;
+        }
+
+        TR {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        TH {
+            background: #fc0; /* Цвет фона ячейки */
+            text-align: left;
+        }
+
+        TD {
+            background: #fff; /* Цвет фона ячеек */
+            text-align: left;
+        }
+
+        TH, TD {
+            border: 1px solid black; /* Параметры рамки */
+            padding: 4px; /* Поля вокруг текста */
+            text-align: left;
+        }
+
+        p {
+            text-align: justify
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <div class="row">
+        <div class="col">
+            <h2 style="text-align:center">Акт-предписание №@Model.aktNum                                                                                  от @Model.aktDate.ToString("d")</h2>
+            <h4 style="text-align:center">Исследование подразделения: @Model.cex.cexName</h4>
+
+            <p>
+                Комиссия 3 ступени в составе: @Model.PredsId.dolgn.dlName. @Model.SekrId.dolgn.dlName.
+                @foreach (var item in Model.sostavs)
+                {
+                    <span>@item.user.dolgn.dlName. </span>
+                }
+            </p>
+            <p> Провела плановую проверку состояния условий охраны труда, промышленной и экологической безопасности, промышленной санитарии в подразделении "@Model.cex.cexName".</p>
+            <p>В ходе проверки комиссии выявлены следующие замечания, которые необходимо устранить в указанные сроки.</p>
+            <table style="border-collapse: collapse; border: 1px solid black;">
+                <thead>
+                    <tr>
+                        <td>№</td>
+                        <td>Помещение</td>
+                        <td>Предписание</td>
+                        <td>Основание</td>
+                        <td>Примечание</td>
+                        <td>Исполнитель          </td>
+                        <td>Срок</td>
+                        <td>Итог</td>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.predps)
+                {
+            <tr>
+                <td>
+                    @(rNo++)
+                </td>
+                <td>
+                    @item.pom.pomName
+                </td>
+                <td>
+                    @item.prText
+                </td>
+                <td>
+                    @item.osnova
+                </td>
+                <td>
+                    @item.prim
+                </td>
+                <td>
+                    @if (@item.appUser != null)
+                    {
+                        @item.appUser.GetFio()
+                    }
+                </td>
+                <td>
+                    @item.prDate.ToString("d")
+                </td>
+                <td>
+                    @if (!String.IsNullOrEmpty(item.prIspNote))
+                    {
+                        <span> Устранено </span>
+                    }
+                </td>
+            </tr>
+                }
+
+            </table>
+            <h4 style="text-align: center">
+                Заключение комиссии: @if (Model.ocenka != null)
+                {@Model.ocenka}
+            </h4>
+
+            <div style="display:table; width: 100%">
+                <div style="display: table-row">
+                    <div style="display:table-cell">Председатель комиссии:</div>
+                    <div style="display:table-cell; text-align:right">@Model.PredsId.GetFio() ._____________________</div>
+                </div>
+            </div>
+
+            <div style="display:table; width: 100%; margin-top: 15px">
+                <div style="display: table-row">
+                    <div style="display:table-cell">Секретарь комиссии:</div>
+                    <div style="display: table-cell;text-align: right">@Model.SekrId.GetFio() ._____________________</div>
+                </div>
+            </div>
+            <p>
+                Члены комиссии: @foreach (var item in Model.sostavs)
+                {
+                    <span> </span>
+                }
+            </p>
+
+            @foreach (var item in Model.sostavs)
+            {
+                <p style="text-align:right">@item.user.GetFio() .______________________</p>
+            }
+
+            <div style="display:table; width: 100%; margin-top: 15px">
+                <div style="display: table-row">
+                    <div style="display:table-cell">Акт получен: «______» «______» «______» г.</div>
+                    <div style="display: table-cell;text-align: right"></div>
+
+                </div>
+            </div>
+            
+            <div style="display:table; width: 100%; margin-top: 15px">
+                <div style="display: table-row">
+                    <div style="display:table-cell">Начальник подразделения:</div>
+                    <div style="display: table-cell;text-align: right">@Model.cex.appUser.GetFio() .______________________</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

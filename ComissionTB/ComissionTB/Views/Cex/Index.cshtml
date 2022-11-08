@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ComissionTB.Models.Cex>
+
+@{
+    ViewData["Title"] = "Подразделения";
+}
+
+<h1>Подразделения</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">Создать</a>
+</p>
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.cexName)
+            </th>
+            <th>
+                Руководитель
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cexName)
+                </td>
+                <td>
+                    @item.appUser.GetFio().ToString()
+                </td>
+                <td>
+                    <a asp-action="Pom" asp-route-id="@item.id_cex" class="btn-primary btn-sm">Помещения</a> |
+                    <a asp-action="Edit" asp-route-id="@item.id_cex" class="btn-warning btn-sm">Изменить</a> |
+                    <a asp-action="Delete" asp-route-id="@item.id_cex" class="btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

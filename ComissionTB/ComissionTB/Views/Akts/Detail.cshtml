@@ -1,0 +1,382 @@
+﻿@*@model ComissionTB.Models.Akt*@
+
+@model ComissionTB.ViewModels.AktDetailViewModel
+
+@{
+    ViewData["Title"] = "Информация об акте";
+    int rNo = 1;
+}
+
+
+<h3>
+    Акт №@Model.akt.aktNum от @Model.akt.aktDate.ToString("d")
+    <a asp-action="Prints" asp-route-id="@Model.akt.aktNo" class="btn-success btn-sm">Печать</a>
+    @if (User.IsInRole("admin") ||
+    User.IsInRole("secr"))
+    {
+        <span></span><a asp-action="Delete" asp-route-id="@Model.akt.aktNo" class="btn-danger btn-sm">Удалить</a>
+    }
+</h3>
+
+<div class="card">
+    <h5 class="card-title">    Подразделение: @Model.akt.cex.cexName</h5>
+    <div class="card-body">
+        <table>
+            <tr>
+                <td><h6>Секретарь: @Model.akt.SekrId.GetFio().</h6></td>
+                <td>
+                    @if (Model.akt.SekrId.Email == User.Identity.Name)
+                    {
+                        <form asp-action="soglSecr">
+                            <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                            <button type="submit" class="btn btn-sm btn-success">Отправить на Согласовать</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="font-weight-bold text-success"> ОТПРАВЛЕНО НА СОГЛАСОВАНИЕ</span>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><h6>Председатель: @Model.akt.PredsId.GetFio().</h6></td>
+                <td>
+                    @if (Model.akt.SoglPreds == null || Model.akt.SoglPreds == false)
+                    {
+                        if (Model.akt.PredsId.Email == User.Identity.Name)
+                        {
+                            <form asp-action="soglPreds">
+                                <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                                <button type="submit" class="btn btn-sm btn-success">Согласовать</button>
+                            </form>
+                        }
+                    }
+                    else
+                    {
+                        <span class="font-weight-bold text-success"> СОГЛАСОВАНО</span>
+                    }
+                </td>
+               
+            </tr>
+
+        </table>
+        <hr />
+        @if (User.IsInRole("admin") || User.IsInRole("secr"))
+        {
+            if ((Model.akt.SoglPreds == null || Model.akt.SoglPreds == false))
+            {
+                <div>
+                    <form class="form-inline" asp-action="AddSostav">
+                        <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                        <div class="form-group">
+                            <h6 class="control-label">Состав комиссии: </h6>
+                            @Html.DropDownListFor(
+                              m => m.com_id,
+                              new SelectList(Model.appComiss, "Id", "userFio"),
+                              new { @class = "form-control form-control-sm" }
+                          ) <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
+                        </div>
+
+                    </form>
+                </div>
+            }
+
+            <div>
+                <form class="form-inline" asp-action="SetOcen">
+                    <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                    <div class="form-group">
+                        <h6 class="control-label">Заключение комиссии: </h6>
+                        <select name="ocenka" class="form-control form-control-sm">
+
+                            @if (Model.akt.ocenka == " ")
+                            {
+                                <option selected="selected" value=" "> </option>
+                            }
+                            else
+                            {
+                                <option value=" "> </option>
+                            }
+
+                            @if (Model.akt.ocenka == "НЕУДОВЛЕТВОРИТЕЛЬНО")
+                            {
+                                <option selected="selected" value="НЕУДОВЛЕТВОРИТЕЛЬНО">НЕУДОВЛЕТВОРИТЕЛЬНО</option>
+                            }
+                            else
+                            {
+                                <option value="НЕУДОВЛЕТВОРИТЕЛЬНО">НЕУДОВЛЕТВОРИТЕЛЬНО</option>
+                            }
+
+                            @if (Model.akt.ocenka == "УДОВЛЕТВОРИТЕЛЬНО")
+                            {
+                                <option selected="selected" value="УДОВЛЕТВОРИТЕЛЬНО">УДОВЛЕТВОРИТЕЛЬНО</option>
+                            }
+                            else
+                            {
+                                <option value="УДОВЛЕТВОРИТЕЛЬНО">УДОВЛЕТВОРИТЕЛЬНО</option>
+                            }
+
+                            @if (Model.akt.ocenka == "ХОРОШО")
+                            {
+                                <option selected="selected" value="ХОРОШО">ХОРОШО</option>
+                            }
+                            else
+                            {
+                                <option value="ХОРОШО">ХОРОШО</option>
+                            }
+
+                            @if (Model.akt.ocenka == "ОТЛИЧНО")
+                            {
+                                <option selected="selected" value="ОТЛИЧНО">ОТЛИЧНО</option>
+                            }
+                            else
+                            {
+                                <option value="ОТЛИЧНО">ОТЛИЧНО</option>
+                            }
+
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">Применить</button>
+                </form>
+            </div>
+
+        }
+        else
+        {
+            <h6>Заключение комиссии: <span class="font-weight-bold text-success">@Model.akt.ocenka</span></h6>
+            <h6>Состав комиссии:</h6>
+        }
+        <hr />
+        <table>
+            @foreach (var item in Model.akt.sostavs)
+            {
+                <tr>
+                    <td><h6>@item.user.GetFio().</h6></td>
+                    <td>
+                        @if ((User.IsInRole("admin") || User.IsInRole("secr")) &&
+                           (Model.akt.SoglPreds == null || Model.akt.SoglPreds == false))
+                        {
+                            <form asp-action="delSost">
+                                <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                                <input type="hidden" name="id_st" value="@item.id_st" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+                                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                        <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        }
+                    </td>
+                    <td>
+                        @if (item.isSogl == null || item.isSogl == false)
+                        {
+                            if (item.user.Email == User.Identity.Name)
+                            {
+                                <form asp-action="soglComm">
+                                    <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                                    <input type="hidden" name="id_st" value="@item.id_st" />
+                                    <button type="submit" class="btn btn-sm btn-success">Согласовать</button>
+                                </form>
+                            }
+                        }
+                        else
+                        {
+                            <span class="font-weight-bold text-success"> СОГЛАСОВАНО</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>Предписания</h5>
+
+        @if ((User.IsInRole("admin") || User.IsInRole("secr")) &&
+           (Model.akt.SoglPreds == null || Model.akt.SoglPreds == false))
+        {
+            @* вставка предписания*@
+            <a asp-action="CreatePredp" asp-route-id="@Model.akt.aktNo" class="btn btn-primary btn-sm">Добавить</a>
+        }
+
+    <table class="table table-bordered table-hover table-sm">
+        <tr>
+            <th>№</th>
+            <th>Помещение</th>
+            <th>Предписание</th>
+            <th>Основание</th>
+            <th>Примечание</th>
+            <th>Исполнитель</th>
+            <th>Срок</th>
+            <th>Выполнен</th>
+            <th>Итог</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.akt.predps)
+        {
+    <tr class="@((item.prDate <= DateTime.Now.Date && item.prIspDate == default(DateTime)) ? "bg-danger text-white" : "")
+                    @(item.prIspNote != "" ?  "bg-success text-white" : "")">
+
+        <td>@(rNo++)</td>
+
+        <td>@item.pom.pomName</td>
+        <td>@item.prText</td>
+        <td>@item.osnova</td>
+        <td>@item.prim</td>
+        <td>
+            @if (item.appUser == null)
+            {
+                @if (Model.akt.cex.appUser.Email == User.Identity.Name)
+                {
+                    <div>
+                        <form class="form-inline" asp-action="SetOtv">
+                            <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                            <input type="hidden" name="prNo" value="@item.prNo" />
+                            <div class="form-group">
+                                @Html.DropDownListFor(
+                                        m => m.isp_id,
+                                        new SelectList(Model.appIsp, "Id", "userFio"),
+                                        new { @class = "form-control form-control-sm" }
+                                    )
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary">Назначить</button>
+                        </form>
+                    </div>
+                }
+            }
+            else
+            {
+                @item.appUser.GetFio()
+            }
+        </td>
+
+        <td>@item.prDate.Date.ToString("d")</td>
+
+        <td>
+            @if (!String.IsNullOrEmpty(item.prIspNote))
+            {
+                @item.prIspDate.ToString("d")
+            }
+        </td>
+
+
+
+        <td>
+            @if (item.appUser != null)
+                if (User.Identity.Name == item.appUser.Email && String.IsNullOrEmpty(item.prIspNote))
+                {
+                    <a asp-action="ExecPredp"
+                       asp-route-id="@item.prNo"
+                       asp-route-id2="@Model.akt.aktNo"
+                       class="btn btn-primary btn-sm">Выполнен</a>
+                }
+                else
+                {
+                    @item.prIspNote
+                }
+        </td>
+        <td>
+            @if ((User.IsInRole("admin") || User.IsInRole("secr")) &&
+               (Model.akt.SoglPreds == null || Model.akt.SoglPreds == false))
+            {
+                <div style="float: left;" class="ml-1">
+                    <form asp-action="DeletePredp" method="post" class="form-inline">
+                        <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                        <input type="hidden" name="prNo" value="@item.prNo" />
+                        <input type="submit" class="btn btn-danger btn-sm" value="Удалить" />
+                    </form>
+                </div>
+            }
+        </td>
+        <td>
+            
+            @if ((User.IsInRole("admin") || User.IsInRole("secr")) &&
+               (Model.akt.SoglPreds == null || Model.akt.SoglPreds == false))
+            {                             //редактировать предписание
+                <div style="float: left;" class="ml-1">
+                    <a asp-action="EditPredp"
+                       asp-route-id1="@item.prNo"
+                       asp-route-id2="@Model.akt.aktNo"
+                       class="btn btn-warning btn-sm"
+                       >Изменить</a>
+                </div>
+            }
+        </td>
+    </tr>
+                }
+    </table>
+
+
+        @*@foreach (var item in Model.akt.predps)
+            {
+                <div class="card text-left">
+                    <div class="card-header">
+                        № @(rNo++) - Срок: @item.prDate.Date.ToString("d")
+                    </div>
+                    <div class="card-body">
+                        @if (item.appUser == null)
+                        {
+                            @if (Model.akt.cex.appUser.Email == User.Identity.Name)
+                            {
+                                <div>
+                                    <form class="form-inline" asp-action="SetOtv">
+                                        <input type="hidden" name="aktNo" value="@Model.akt.aktNo" />
+                                        <input type="hidden" name="prNo" value="@item.prNo" />
+                                        <div class="form-group">
+                                            <label class="control-label">Исполнитель</label>
+                                            @Html.DropDownListFor(
+                                                 m => m.isp_id,
+                                                 new SelectList(Model.appComiss, "Id", "userFio"),
+                                                 new { @class = "form-control form-control-sm" }
+                                             )
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-primary">Назначить</button>
+                                    </form>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <h5 class="card-title">Исполнитель: <span class="text-success">@item.appUser.GetFio()</span></h5>
+                        }
+                        <p class="card-text">@item.prText</p>
+                        @if (!string.IsNullOrEmpty(item.prIspNote))
+                        {
+                            <hr />
+                            <h5>Выполнен: @item.prIspDate.ToString("d")</h5>
+                            <p class="card-text">@item.prIspNote</p>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        @if (User.IsInRole("admin") ||
+                        User.IsInRole("preds") ||
+                        User.IsInRole("secr"))
+                        {
+                            <div style="float: left;" class="ml-1">
+                                <form asp-action="DeletePredp" method="post" class="form-inline">
+                                    <input type="hidden" asp-for="@Model.akt.aktNo" />
+                                    <input type="hidden" asp-for="@item.prNo" />
+                                    <input type="submit" class="btn btn-danger btn-sm" value="Удалить" />
+                                </form>
+                            </div>
+
+                        }
+                        @if(item.appUser != null)
+                        if (User.Identity.Name == item.appUser.Email)
+                        {
+                            <a asp-action="ExecPredp"
+                                asp-route-id="@item.prNo"
+                                asp-route-id2="@Model.akt.aktNo"
+                                class="btn btn-primary btn-sm">Выполнен</a>
+                        }
+                    </div>
+                </div>
+            }*@
+
+    </div>
+</div>

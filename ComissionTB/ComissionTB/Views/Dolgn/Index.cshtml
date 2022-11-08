@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ComissionTB.Data.Dolgn>
+
+@{
+    ViewData["Title"] = "Должности";
+}
+
+<h1>Должности</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">Создать</a>
+</p>
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.dlName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dlName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id_dl" class="btn-warning btn-sm">Изменить</a> |
+                    <a asp-action="Delete" asp-route-id="@item.id_dl" class="btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,33 @@
+﻿@model ComissionTB.ViewModels.PomCreateViewModel
+
+@{
+    ViewData["Title"] = "Изменить помещение";
+}
+
+<h1>Изменить помещение</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditPom">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.id_pom" />
+            <input type="hidden" asp-for="@Model.id_cex" />
+
+            <div class="form-group">
+                <label asp-for="pomName" class="control-label"></label>
+                <input asp-for="pomName" class="form-control" />
+                <span asp-validation-for="pomName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-warning" />
+                <a asp-action="Pom" asp-route-id="@Model.id_cex" class="btn btn-primary">К списку</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

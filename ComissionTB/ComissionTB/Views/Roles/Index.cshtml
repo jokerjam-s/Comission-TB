@@ -1,0 +1,31 @@
+﻿@model IEnumerable<AppRoles>
+@{
+    ViewBag.Title = "Изменение ролей";
+}
+
+<h2>Список ролей</h2>
+
+@*<a asp-action="Create">Добавить роль</a>*@
+<a class="btn btn-success btn-sm" asp-action="UserList">Список пользователей</a>
+
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>Имя роли</th>
+        </tr>
+    </thead>
+
+    @foreach (var role in Model)
+    {
+        <tr>
+            <td>@role.Descript</td>
+            @*<td>
+                    <form asp-action="Delete" asp-route-id="@role.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>*@
+        </tr>
+    }
+</table>

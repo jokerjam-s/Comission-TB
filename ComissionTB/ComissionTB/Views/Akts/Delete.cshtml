@@ -1,0 +1,19 @@
+﻿@model ComissionTB.Models.Akt
+
+@{
+    ViewData["Title"] = "Удаление акта";
+}
+
+<h1>Удалить</h1>
+
+<h3>Уверены в необходимости удаления даннной информации?</h3>
+<div>
+    <h5>Акт №@Model.aktNum</h5>
+    <h5>Подразделение: @Model.cex.cexName</h5>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="aktNo" />
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Detail" asp-route-id="@Model.aktNo" class="btn btn-primary">К списку</a>
+    </form>
+</div>

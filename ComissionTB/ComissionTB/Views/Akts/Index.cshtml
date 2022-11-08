@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Akt>
+
+@{
+    ViewData["Title"] = "Акты";
+}
+
+<h1>Акты</h1>
+
+<div>
+    <form class="form-inline" asp-action="getAkt">
+        @if (User.IsInRole("admin") ||
+        User.IsInRole("secr"))
+        {
+            <a asp-action="Create" class="btn btn-success btn-sm">Новый Акт</a><span> | </span>
+        }
+            <input type="number" class="form-control form-control-sm" name="nYear" value="@ViewBag.nYear" maxlength="4" />
+            <button type="submit" class="btn btn-primary btn-sm">Показать</button>
+        </form>
+</div>
+
+
+<table class="table mt-3 table-hover table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.aktNum)
+            </th>
+            <th>
+                Дата
+            </th>
+            <th>
+                Цех
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr onclick="window.location.href = 'Akts/Detail/@item.aktNo'; return false" style="cursor: pointer">
+                <td>
+                    @Html.DisplayFor(modelItem => item.aktNum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.aktDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cex.cexName)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@*
+    <td>
+         asp-action="Detail" asp-route-id="@item.aktNo"
+    <a asp-action="Prints" asp-route-id="@item.aktNo" class="btn-light btn-sm">Печать</a> |
+    <a asp-action="Delete" asp-route-id="@item.aktNo" class="btn-danger btn-sm">Удалить</a>
+    </td>
+*@

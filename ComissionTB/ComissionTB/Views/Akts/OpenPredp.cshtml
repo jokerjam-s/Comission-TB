@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Predp>
+
+@{
+    ViewData["Title"] = "Открытые предписания";
+}
+
+<h1>Открытые предписания</h1>
+
+<p>
+    <a asp-action="PrintOpenPredp" class="btn-success btn-sm">Печать</a>
+</p>
+
+
+<table class="table table-bordered table-hover table-sm">
+    <tr>
+        <th>Акт №</th>
+        <th>Цех</th>
+        <th>Помещение</th>
+        <th>Предписание</th>
+        <th>Основание</th>
+        <th>Примечание</th>
+        <th>Исполнитель          </th>
+        <th>Срок</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr onclick="window.location.href = '/Akts/Detail/@item.akt.aktNo'; return false" style="cursor: pointer" class="
+    @((item.prDate <= DateTime.Now.Date && item.prIspDate == default(DateTime)) ? "bg-danger text-white" : "")">
+
+    <td>@item.akt.aktNum</td>
+    <td>@item.akt.cex.cexName</td>
+    <td>@item.pom.pomName</td>
+    <td>@item.prText</td>
+    <td>@item.osnova</td>
+    <td>@item.prim</td>
+    <td>
+        @if (item.appUser != null)
+        {
+            @item.appUser.GetFio()
+        }
+    </td>
+    <td>@item.prDate.ToString("d")</td>
+</tr>
+    }
+</table>

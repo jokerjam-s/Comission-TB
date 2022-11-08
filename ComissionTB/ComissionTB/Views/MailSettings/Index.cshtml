@@ -1,0 +1,51 @@
+﻿@model MailSettings
+
+@{
+    ViewData["Title"] = "Параметры рассылки";
+}
+
+<h1>Параметры рассылки</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="mail_id" />
+            <div class="form-group">
+                <label asp-for="PostMail" class="control-label"></label>
+                <input asp-for="PostMail" class="form-control" />
+                <span asp-validation-for="PostMail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostPass" class="control-label"></label>
+                <input asp-for="PostPass" class="form-control" />
+                <span asp-validation-for="PostPass" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostSmtp" class="control-label"></label>
+                <input asp-for="PostSmtp" class="form-control" />
+                <span asp-validation-for="PostSmtp" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PostPort" class="control-label"></label>
+                <input asp-for="PostPort" class="form-control" />
+                <span asp-validation-for="PostPort" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary">На главную</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

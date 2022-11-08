@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model ComissionTB.ViewModels.ChangeRoleViewModel
+@{
+    ViewBag.Title = "Изменение ролей";
+}
+
+<h2>Изменение ролей для пользователя @Model.UserEmail</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="email" value="@Model.UserEmail" />
+    @foreach (AppRoles role in Model.AllRoles)
+    {
+        <div class="form-group">
+            <input type="checkbox" class="form-check-inline" name="roles" value="@role.Name"
+                   @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />
+            <label class="form-check-label">
+                @role.Descript
+            </label>
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Применить</button>
+</form>
